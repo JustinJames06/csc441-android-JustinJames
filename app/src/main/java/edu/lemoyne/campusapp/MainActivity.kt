@@ -30,10 +30,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// --- Class 5: Step 6: my own greeting ---
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "Hello Justin",
         modifier = modifier
     )
 }
@@ -42,6 +43,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     CampusAppTheme {
-        Greeting("Android")
+        Greeting("Justin")
     }
 }
