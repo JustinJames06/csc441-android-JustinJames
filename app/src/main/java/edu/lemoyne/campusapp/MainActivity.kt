@@ -58,7 +58,7 @@ fun CounterDemo() {
     var count by remember { mutableStateOf(0) }
 
     Button(
-        onClick = {count++}
+        onClick = { count++ }
     ) {
         Text(text = "Tapped $count times")
     }
@@ -79,14 +79,14 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     }
 
     // --- Class 7: Step 3: What typed lives in state
-    var newStat by remember {mutableStateOf("")}
+    var newStat by remember { mutableStateOf("") }
     // --- Class 6: Step 3: a column, so things stack ---
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(all = 24.dp)
     ) {
-        CounterDemo()
+        //CounterDemo()
         // --- Lab 6 · Task 3: a picture of my own ---
         Image(
             painter = painterResource(id = R.drawable.yankees),
@@ -119,26 +119,53 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         // --- Class 7: Step 3: the text field
         OutlinedTextField(
             value = newStat,
-            onValueChange = { newStat = it},
-            label = {Text("Stat name")},
+            onValueChange = { newStat = it },
+            label = { Text("Stat name") },
             modifier = Modifier.fillMaxWidth()
         )
 
-        //Class 7: Step 4: the button changes the state ---
+        // --- Lab 7 · Task 4: a live character counter ---
+        Text(
+            text = "${newStat.length} / 40",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+                    //Class 7: Step 4: the button changes the state ---
         Button(onClick = {
             stats.add(newStat)
             newStat = ""
         }) {
             Text("Add Stat")
         }
+        // --- Lab7 . Task 1 remove the last item
+        Button(onClick = {
+            if(stats.isNotEmpty()){
+                stats.removeAt(stats.lastIndex)
+            }
+        }) {
+            Text("Remove last")
+        }
+
+        // --- Lab 7 · Task 3: clear all ---
+        Button(onClick = {
+            if(stats.isNotEmpty()) {
+                stats.clear()
+            }
+        }) {
+            Text("Clear Stats")
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         // Class 7: Step 2: draw whatever is in the list
+        // --- Lab7 . Step 2: singular and plural ---
         Text(
-            text = "${stats.size} stats",
+            text = if (stats.size == 1) "1 stat" else "${stats.size} stats",
             fontWeight = FontWeight.Bold
         )
+
+
         for (stat in stats) {
             Text(text = stat, fontSize = 18.sp)
         }
