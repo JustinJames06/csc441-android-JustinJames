@@ -215,8 +215,12 @@ fun validateStatName(input: String, existingStats: List<String>): String? {
     val name = input.trim()
     return when {
         name.isEmpty() -> "Enter a stat name"
+        // --- Lab 8 · Task 1: minimum length ---
+        name.length < 3 -> "Too short — at least 3 characters"
         name.length > MAX_NAME_LENGTH -> "Keep it to $MAX_NAME_LENGTH characters or fewer"
         existingStats.any { it.equals(name, ignoreCase = true) } -> "$name is already on the list"
+        // --- Lab 8 · Task 2: my own rule ---
+        name.all { it.isDigit() } -> "A name can't be only numbers"
         else -> null
     }
 }

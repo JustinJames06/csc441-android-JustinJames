@@ -21,4 +21,16 @@ Week 6 Wednesday:
     3. Remember updates the value on the screen with every click. If you didn't have a remember, 
        the count on the screen wouldn't update 
 
-    
+Week 6 Friday:
+    Task 2: I added that the input can't only be numbers. My app tracks stats for a team with a 
+            description of each stat. If the input is only numbers, then there can't be a description.
+    Task 3: 
+	What I typed | What the app did | Correct?
+	nothing      | add button greyed out | yes
+	only spaces  | add button greyed out | yes
+	too long     | won't let me add more than 30 characters | yes
+	too short    | gave an error for too short 		| yes
+	Duplicate in different capitals | said that the input was already on the list | yes
+	Own rule failing | gives an error that says only numbers | yes
+	own rule passing | adds the input to the list		| yes
+	One valid item   | adds the input to the list		| yes
