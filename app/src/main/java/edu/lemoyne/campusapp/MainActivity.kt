@@ -80,6 +80,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
     // --- Class 7: Step 3: What typed lives in state
     var newStat by remember { mutableStateOf("") }
+    // Class 8: Step 2: the error message lives in a state too
+    var error by remember { mutableStateOf<String?>(null) }
     // --- Class 6: Step 3: a column, so things stack ---
     Column(
         modifier = modifier
@@ -119,28 +121,53 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         // --- Class 7: Step 3: the text field
         OutlinedTextField(
             value = newStat,
-            onValueChange = { newStat = it },
+            // --- Class 8: Step 3: The field itself pushes back ---
+
+            onValueChange = {
+                newStat = it.take(MAX_NAME_LENGTH)
+                error = null
+            },
             label = { Text("Stat name") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            isError = error !=null
+
         )
+
+        error?.let { message ->
+            Text(
+                text = message,
+                color = Color.Red
+            )
+        }
 
         // --- Lab 7 · Task 4: a live character counter ---
         Text(
-            text = "${newStat.length} / 40",
+            text = "${newStat.length} / $MAX_NAME_LENGTH",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-                    //Class 7: Step 4: the button changes the state ---
+        //Class 7: Step 4: the button changes the state ---
         Button(onClick = {
-            stats.add(newStat)
-            newStat = ""
-        }) {
+            // --- Class 8: Step 3: check before you add
+            val problem = validateStatName(input = newStat, existingStats = stats)
+            if (problem == null) {
+                stats.add(newStat)
+                newStat = ""
+            } else {
+                error = problem
+            }
+
+        },
+            // --- Class 8: Step 4: the sign on the door, not the lock ---
+            enabled = newStat.isNotBlank()
+            ) {
             Text("Add Stat")
         }
         // --- Lab7 . Task 1 remove the last item
         Button(onClick = {
-            if(stats.isNotEmpty()){
+            if (stats.isNotEmpty()) {
                 stats.removeAt(stats.lastIndex)
             }
         }) {
@@ -149,7 +176,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         // --- Lab 7 · Task 3: clear all ---
         Button(onClick = {
-            if(stats.isNotEmpty()) {
+            if (stats.isNotEmpty()) {
                 stats.clear()
             }
         }) {
@@ -177,6 +204,24 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+    }
+}
+
+//
+const val MAX_NAME_LENGTH = 30
+
+// --- Class 8: Step 1: one rule book for stat names ---
+fun validateStatName(input: String, existingStats: List<String>): String? {
+    val name = input.trim()
+    return when {
+        name.isEmpty() -> "Enter a stat name"
+        // --- Lab 8 · Task 1: minimum length ---
+        name.length < 3 -> "Too short — at least 3 characters"
+        name.length > MAX_NAME_LENGTH -> "Keep it to $MAX_NAME_LENGTH characters or fewer"
+        existingStats.any { it.equals(name, ignoreCase = true) } -> "$name is already on the list"
+        // --- Lab 8 · Task 2: my own rule ---
+        name.all { it.isDigit() } -> "A name can't be only numbers"
+        else -> null
     }
 }
 
