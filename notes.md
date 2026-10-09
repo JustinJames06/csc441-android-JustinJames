@@ -22,8 +22,8 @@ Week 6 Wednesday:
        the count on the screen wouldn't update 
 
 Week 6 Friday:
-    Task 2: I added that the input can't only be numbers. My app tracks stats for a team with a 
-            description of each stat. If the input is only numbers, then there can't be a description.
+    Task 2: I added that the input can't only be numbers. My app tracks stats for a team with a description of each stat. If the input is 	    only numbers, then there can't be a description.
+
     Task 3: 
 	What I typed | What the app did | Correct?
 	nothing      | add button greyed out | yes
@@ -34,3 +34,9 @@ Week 6 Friday:
 	Own rule failing | gives an error that says only numbers | yes
 	own rule passing | adds the input to the list		| yes
 	One valid item   | adds the input to the list		| yes
+	
+
+Week 7 Wednesday:
+	When I was on the list screen and rotated, I remained on the list screen, but my new items weren't there. This is because currentScreen is created using rememberSaveable and trails is created using remember. rememberSaveable preserves the state during transitions like screen rotations.
+
+    
