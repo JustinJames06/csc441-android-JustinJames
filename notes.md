@@ -36,4 +36,7 @@ Week 6 Friday:
 	One valid item   | adds the input to the list		| yes
 	
 
+Week 7 Wednesday:
+	When I was on the list screen and rotated, I remained on the list screen, but my new items weren't there. This is because currentScreen is created using rememberSaveable and trails is created using remember. rememberSaveable preserves the state during transitions like screen rotations.
+
     

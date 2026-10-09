@@ -65,11 +65,19 @@ fun YankeeAppScreen(modifier: Modifier = Modifier) {
         "home" -> HomeScreen(
             stats = stats,
             onAddStat = { stats.add(it) },
-            onSeeAll = { currentScreen = "list" }
+            onSeeAll = { currentScreen = "list" },
+            // --- Lab 9: Task 2:
+            onAbout = { currentScreen = "about"}
         )
 
         "list" -> ListScreen(
             stats = stats,
+            onBack = {currentScreen = "home"},
+            modifier = modifier
+        )
+
+        // --- Lab 9: Task 2:
+        "about" -> AboutScreen(
             onBack = {currentScreen = "home"},
             modifier = modifier
         )
@@ -84,6 +92,8 @@ fun HomeScreen(
     stats: MutableList<String>,
     onAddStat: (String) -> Unit,
     onSeeAll: () -> Unit,
+    // --- Lab 9: Task 2:
+    onAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -197,6 +207,12 @@ fun HomeScreen(
         ){
             Text(text = "See all stats")
         }
+        // --- Lab 9: Task 2:
+        Button(
+            onClick = onAbout
+        ){
+            Text(text = "About")
+        }
 
         // --- Lab 6 · Task 2: footer ---
         Spacer(modifier = Modifier.height(24.dp))
@@ -215,21 +231,28 @@ fun ListScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Class 9: Step 6: the phones back butotn goes back too
+    // Class 9: Step 6: the phones back button goes back too
     BackHandler { onBack() }
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(24.dp)
     ){
-      TextButton(onClick = onBack) {
+        TextButton(onClick = onBack) {
           Text ("Back")
-      }
+        }
         Text(
             text = "All Stats",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
+
+        // --- Lab 9 · Task 1: count on the list screen ---.
+        Text(
+            text = if (stats.size == 1) "1 stat" else "${stats.size} stats",
+            fontWeight = FontWeight.Medium,
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         for(stat in stats) {
@@ -237,6 +260,32 @@ fun ListScreen(
         }
     }
 
+}
+
+// --- Lab 9 · Task 2: a third screen ---
+@Composable
+fun AboutScreen(
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    BackHandler { onBack() }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+    ) {
+        TextButton(onClick = onBack) {
+            Text("Back")
+        }
+        Text(
+            text = "About",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "The stats list keeps track of stats for the New York Yankees.")
+        Text(text = "Built for CSC 441 by Justin James.")
+    }
 }
 
 //
@@ -271,7 +320,9 @@ fun HomeScreenPreview() {
                 )
             },
             onAddStat = {},
-            onSeeAll = {}
+            onSeeAll = {},
+            // --- Lab 9: Task 2:
+            onAbout = {}
         )
     }
 }
@@ -292,7 +343,9 @@ fun HomeScreenDarkPreview() {
                     )
                 },
                 onAddStat = {},
-                onSeeAll = {}
+                onSeeAll = {},
+                // --- Lab 9: Task 2:
+                onAbout = {}
             )
         }
     }
