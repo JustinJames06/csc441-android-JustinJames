@@ -84,6 +84,7 @@ fun YankeeAppScreen(modifier: Modifier = Modifier) {
             onBack = {currentScreen = "home"},
             // --- Class 10 · Step 4: only the owner changes the list ---
             onRemove = { stats.remove(it) },
+            onRemoveAll = {stats.clear()},
             modifier = modifier
         )
 
@@ -241,6 +242,7 @@ fun ListScreen(
     stats: List<String>,
     onBack: () -> Unit,
     onRemove: (String) -> Unit,
+    onRemoveAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Class 9: Step 6: the phones back button goes back too
@@ -264,6 +266,12 @@ fun ListScreen(
             text = if (stats.size == 1) "1 stat" else "${stats.size} stats",
             fontWeight = FontWeight.Medium,
         )
+        // --- Lab 10 · Task 2: remove all, through the owner ---
+        if (stats.isNotEmpty()) {
+            TextButton(onClick = onRemoveAll) {
+                Text("Remove all")
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -273,6 +281,10 @@ fun ListScreen(
                 text = "No stats yet. Add one on the home screen.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            // --- Lab 10 · Task 1: a way out of the empty screen ---
+            TextButton(onClick = onBack) {
+                Text ("Return to Home Screen")
+            }
         } else {
             // --- Class 10 · Step 2: a list that scrolls ---
             LazyColumn(
@@ -409,7 +421,8 @@ fun ListScreenPreview() {
                 )
             },
             onBack = {},
-            onRemove = {}
+            onRemove = {},
+            onRemoveAll = {}
         )
     }
 }
@@ -422,7 +435,8 @@ fun ListScreenEmptyPreview() {
         ListScreen(
             stats = emptyList(),
             onBack = {},
-            onRemove = {}
+            onRemove = {},
+            onRemoveAll = {}
         )
     }
 }
