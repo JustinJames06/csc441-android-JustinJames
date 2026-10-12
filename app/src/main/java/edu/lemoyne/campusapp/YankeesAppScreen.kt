@@ -3,12 +3,18 @@ package edu.lemoyne.campusapp
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -21,6 +27,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -53,7 +61,8 @@ fun YankeeAppScreen(modifier: Modifier = Modifier) {
             "Best Player: Cam Schlittler",
             "Current Matchup: Boston Red Sox",
             "Playoffs Clinched",
-            "Last 10: 6-4"
+            "Last 10: 6-4",
+            "World Series Titles: 27"
         )
     }
 
@@ -73,6 +82,9 @@ fun YankeeAppScreen(modifier: Modifier = Modifier) {
         "list" -> ListScreen(
             stats = stats,
             onBack = {currentScreen = "home"},
+            // --- Class 10 · Step 4: only the owner changes the list ---
+            onRemove = { stats.remove(it) },
+            onRemoveAll = {stats.clear()},
             modifier = modifier
         )
 
@@ -229,13 +241,15 @@ fun HomeScreen(
 fun ListScreen(
     stats: List<String>,
     onBack: () -> Unit,
+    onRemove: (String) -> Unit,
+    onRemoveAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Class 9: Step 6: the phones back button goes back too
     BackHandler { onBack() }
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(24.dp)
     ){
         TextButton(onClick = onBack) {
@@ -252,14 +266,57 @@ fun ListScreen(
             text = if (stats.size == 1) "1 stat" else "${stats.size} stats",
             fontWeight = FontWeight.Medium,
         )
+        // --- Lab 10 · Task 2: remove all, through the owner ---
+        if (stats.isNotEmpty()) {
+            TextButton(onClick = onRemoveAll) {
+                Text("Remove all")
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        for(stat in stats) {
-            Text(text = stat, fontSize = 18.sp)
+        // --- Class 10 · Step 5: the empty case ---
+        if (stats.isEmpty()) {
+            Text(
+                text = "No stats yet. Add one on the home screen.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            // --- Lab 10 · Task 1: a way out of the empty screen ---
+            TextButton(onClick = onBack) {
+                Text ("Return to Home Screen")
+            }
+        } else {
+            // --- Class 10 · Step 2: a list that scrolls ---
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(stats) { stat ->
+                    StatRow(name = stat, onRemove = { onRemove(stat) }
+                    )
+                }
+            }
+        }
+}   }
+
+// --- Class 10 · Step 3: one row, as its own Composable ---
+@Composable
+fun StatRow(name: String, onRemove: () -> Unit) {
+    // --- Class 10 · Step 4: a remove button on every row ---
+    TextButton(onClick = onRemove) {
+        Text("Remove")
+    }
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = name,
+                fontSize = 18.sp,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
-
 }
 
 // --- Lab 9 · Task 2: a third screen ---
@@ -363,7 +420,23 @@ fun ListScreenPreview() {
                     "Last 10: 6-4"
                 )
             },
-            onBack = {}
+            onBack = {},
+            onRemove = {},
+            onRemoveAll = {}
+        )
+    }
+}
+
+// --- Class 10 · Step 5: preview the empty case too ---
+@Preview(showBackground = true)
+@Composable
+fun ListScreenEmptyPreview() {
+    CampusAppTheme {
+        ListScreen(
+            stats = emptyList(),
+            onBack = {},
+            onRemove = {},
+            onRemoveAll = {}
         )
     }
 }
