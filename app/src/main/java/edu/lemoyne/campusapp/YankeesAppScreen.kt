@@ -440,3 +440,11 @@ fun ListScreenEmptyPreview() {
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun AboutScreenPreview() {
+    CampusAppTheme() {
+        AboutScreen(onBack = {})
+    }
+}
