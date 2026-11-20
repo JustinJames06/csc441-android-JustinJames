@@ -54,7 +54,7 @@ fun CounterDemo() {
 
 // --- Class 9: Step 2: one owner for the data ---
 @Composable
-fun YankeeAppScreen(showcaseState: ShowcaseUiState, modifier: Modifier = Modifier) {
+fun YankeeAppScreen(showcaseState: ShowcaseUiState, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
     // --- Class 7: Step 2: the list lives in state
     val stats = remember {
         mutableStateListOf(
@@ -98,6 +98,7 @@ fun YankeeAppScreen(showcaseState: ShowcaseUiState, modifier: Modifier = Modifie
         "interests" -> InterestsScreen(
             state = showcaseState,
             onBack = { currentScreen = "home" },
+            onRefresh = onRefresh,
             modifier = modifier
         )
 

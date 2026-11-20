@@ -51,6 +51,7 @@ class MainActivity : ComponentActivity() {
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     YankeeAppScreen(showcaseState = showcaseState,
+                        onRefresh = {showcaseViewModel.refresh()},
                         modifier = Modifier.padding(innerPadding))
                 }
             }
