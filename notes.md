@@ -39,4 +39,10 @@ Week 6 Friday:
 Week 7 Wednesday:
 	When I was on the list screen and rotated, I remained on the list screen, but my new items weren't there. This is because currentScreen is created using rememberSaveable and trails is created using remember. rememberSaveable preserves the state during transitions like screen rotations.
 
-    
+
+Week 13 Wednesday:
+    1. When you open the app, the refresh is called and the data from supabase refreshes.
+    2. The onClick function of the button forces the data to refresh.
+    3. We do this so that the refresh can be kept seperate from the main activity and locally on the screen.
+    4. A successfull [] response means that the API request worked, but the list is empty. A network error means that the API request never worked.
+    5. When I changed a value in the supabase table, that value would change in both the android app and the website.

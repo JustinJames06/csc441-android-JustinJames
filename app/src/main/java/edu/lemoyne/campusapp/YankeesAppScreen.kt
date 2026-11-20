@@ -54,7 +54,7 @@ fun CounterDemo() {
 
 // --- Class 9: Step 2: one owner for the data ---
 @Composable
-fun YankeeAppScreen(modifier: Modifier = Modifier) {
+fun YankeeAppScreen(showcaseState: ShowcaseUiState, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
     // --- Class 7: Step 2: the list lives in state
     val stats = remember {
         mutableStateListOf(
@@ -76,7 +76,8 @@ fun YankeeAppScreen(modifier: Modifier = Modifier) {
             onAddStat = { stats.add(it) },
             onSeeAll = { currentScreen = "list" },
             // --- Lab 9: Task 2:
-            onAbout = { currentScreen = "about"}
+            onAbout = { currentScreen = "about"},
+            onInterestsClick = { currentScreen = "interests" }
         )
 
         "list" -> ListScreen(
@@ -94,6 +95,13 @@ fun YankeeAppScreen(modifier: Modifier = Modifier) {
             modifier = modifier
         )
 
+        "interests" -> InterestsScreen(
+            state = showcaseState,
+            onBack = { currentScreen = "home" },
+            onRefresh = onRefresh,
+            modifier = modifier
+        )
+
     }
 }
 
@@ -106,7 +114,8 @@ fun HomeScreen(
     onSeeAll: () -> Unit,
     // --- Lab 9: Task 2:
     onAbout: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onInterestsClick: () -> Unit = {}
 ) {
 
     // --- Class 7: Step 3: What typed lives in state
@@ -219,6 +228,7 @@ fun HomeScreen(
         ){
             Text(text = "See all stats")
         }
+        Button(onClick = onInterestsClick) { Text("My Interests") }
         // --- Lab 9: Task 2:
         Button(
             onClick = onAbout
